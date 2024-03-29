@@ -38,27 +38,46 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var wallet_adapter_plugin_1 = require("@identity-connect/wallet-adapter-plugin");
 var wallet_adapter_core_1 = require("@aptos-labs/wallet-adapter-core");
+var ts_sdk_1 = require("@aptos-labs/ts-sdk");
 function runScript() {
     return __awaiter(this, void 0, void 0, function () {
-        var IDENTITY_CONNECT_ID, ic, connectedWalletName, walletAdapter, wallet;
+        var IDENTITY_CONNECT_ID, ic, connectedWalletName, walletAdapter, wallet, message, tx;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     IDENTITY_CONNECT_ID = "7e53af3b-dd84-4327-9e12-485b89f15221";
                     ic = new wallet_adapter_plugin_1.IdentityConnectWallet(IDENTITY_CONNECT_ID, {
-                        networkName: wallet_adapter_core_1.NetworkName.Mainnet
+                        networkName: ts_sdk_1.Network.MAINNET
                     });
                     connectedWalletName = "AptosWalletName";
-                    if (!(connectedWalletName && window && localStorage && window.localStorage)) return [3 /*break*/, 2];
+                    if (!connectedWalletName) return [3 /*break*/, 3];
                     walletAdapter = new wallet_adapter_core_1.WalletCore([ic]);
-                    return [4 /*yield*/, walletAdapter._wallets[0].connect()];
+                    return [4 /*yield*/, walletAdapter["_wallets"][0].connect()];
                 case 1:
                     wallet = _a.sent();
+                    // walletAdapter.on("connect", handleConnect);
+                    // walletAdapter.on("disconnect", handleDisconnect);
                     console.log("🚀 ~ wallet:", wallet);
-                    _a.label = 2;
-                case 2: return [2 /*return*/];
+                    message = {
+                        message: "Hello, World!",
+                        nonce: "random_string"
+                    };
+                    return [4 /*yield*/, walletAdapter["_wallets"][0].signMessage(message)];
+                case 2:
+                    tx = _a.sent();
+                    console.log("🚀 ~ runScript ~ tx:", tx);
+                    _a.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     });
 }
+var handleConnect = function () {
+    console.log("Connected to wallet");
+};
+var handleDisconnect = function () {
+    console.log("Disconnected from wallet");
+};
+runScript();
+// Run the script when the button is clicked
 document.getElementById("runScriptBtn").addEventListener("click", runScript);
