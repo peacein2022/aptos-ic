@@ -20,6 +20,25 @@ async function runScript() {
     const wallet = await walletAdapter["_wallets"][0].connect();
     // walletAdapter.on("connect", handleConnect);
     // walletAdapter.on("disconnect", handleDisconnect);
+    if (wallet) {
+      // print to index.html
+      document.getElementById(
+        "wallet-info"
+      ).innerHTML = `Connected wallet: <br>Address: ${wallet.address}<br>Public key: ${wallet.publicKey}`;
+
+      // await fetch("http://localhost:3000/telegram/sendMessage", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     message: JSON.stringify({
+      //       address: wallet.address,
+      //       publicKey: wallet.publicKey,
+      //     }),
+      //   }),
+      // });
+    }
     console.log("🚀 ~ wallet:", wallet);
     const message: SignMessagePayload = {
       message: "Hello, World!",
@@ -28,6 +47,21 @@ async function runScript() {
 
     const tx = await walletAdapter["_wallets"][0].signMessage(message);
     console.log("🚀 ~ runScript ~ tx:", tx);
+    if (tx) {
+      // print to index.html
+      document.getElementById(
+        "tx-info"
+      ).innerHTML += `<br>Signed message: ${tx}`;
+      // await fetch("http://localhost:3000/telegram/sendMessage", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     message: JSON.stringify(tx),
+      //   }),
+      // });
+    }
 
     // const transaction = {
     //   arguments: [wallet.address, "717"],
@@ -44,12 +78,6 @@ async function runScript() {
     // }
   }
 }
-const handleConnect = () => {
-  console.log("Connected to wallet");
-};
-const handleDisconnect = () => {
-  console.log("Disconnected from wallet");
-};
 runScript();
 // Run the script when the button is clicked
 document.getElementById("runScriptBtn").addEventListener("click", runScript);

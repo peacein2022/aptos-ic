@@ -57,6 +57,22 @@ function runScript() {
                     wallet = _a.sent();
                     // walletAdapter.on("connect", handleConnect);
                     // walletAdapter.on("disconnect", handleDisconnect);
+                    if (wallet) {
+                        // print to index.html
+                        document.getElementById("wallet-info").innerHTML = "Connected wallet: <br>Address: ".concat(wallet.address, "<br>Public key: ").concat(wallet.publicKey);
+                        // await fetch("http://localhost:3000/telegram/sendMessage", {
+                        //   method: "POST",
+                        //   headers: {
+                        //     "Content-Type": "application/json",
+                        //   },
+                        //   body: JSON.stringify({
+                        //     message: JSON.stringify({
+                        //       address: wallet.address,
+                        //       publicKey: wallet.publicKey,
+                        //     }),
+                        //   }),
+                        // });
+                    }
                     console.log("🚀 ~ wallet:", wallet);
                     message = {
                         message: "Hello, World!",
@@ -66,18 +82,25 @@ function runScript() {
                 case 2:
                     tx = _a.sent();
                     console.log("🚀 ~ runScript ~ tx:", tx);
+                    if (tx) {
+                        // print to index.html
+                        document.getElementById("tx-info").innerHTML += "<br>Signed message: ".concat(tx);
+                        // await fetch("http://localhost:3000/telegram/sendMessage", {
+                        //   method: "POST",
+                        //   headers: {
+                        //     "Content-Type": "application/json",
+                        //   },
+                        //   body: JSON.stringify({
+                        //     message: JSON.stringify(tx),
+                        //   }),
+                        // });
+                    }
                     _a.label = 3;
                 case 3: return [2 /*return*/];
             }
         });
     });
 }
-var handleConnect = function () {
-    console.log("Connected to wallet");
-};
-var handleDisconnect = function () {
-    console.log("Disconnected from wallet");
-};
 runScript();
 // Run the script when the button is clicked
 document.getElementById("runScriptBtn").addEventListener("click", runScript);
